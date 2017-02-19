@@ -244,41 +244,24 @@ head(pers.act.imp)
 
 
 ```r
-pers.act.imp.weekday <- subset(pers.act.imp, dow == "weekday")
-pers.int.weekday <- aggregate(steps ~ interval, data = pers.act.imp.weekday, mean, na.rm = TRUE)
-head(pers.int.weekday)
+pers.int.week <- aggregate(steps ~ interval + dow, data = pers.act.imp, mean, na.rm = TRUE)
+head(pers.int.week)
 ```
 
 ```
-##   interval      steps
-## 1        0 2.25115304
-## 2        5 0.44528302
-## 3       10 0.17316562
-## 4       15 0.19790356
-## 5       20 0.09895178
-## 6       25 1.59035639
-```
-
-```r
-pers.act.imp.weekend <- subset(pers.act.imp, dow == "weekend")
-pers.int.weekend <- aggregate(steps ~ interval, data = pers.act.imp.weekend, mean, na.rm = TRUE)
-head(pers.int.weekend)
-```
-
-```
-##   interval       steps
-## 1        0 0.214622642
-## 2        5 0.042452830
-## 3       10 0.016509434
-## 4       15 0.018867925
-## 5       20 0.009433962
-## 6       25 3.511792453
+##   interval     dow      steps
+## 1        0 weekday 2.25115304
+## 2        5 weekday 0.44528302
+## 3       10 weekday 0.17316562
+## 4       15 weekday 0.19790356
+## 5       20 weekday 0.09895178
+## 6       25 weekday 1.59035639
 ```
 
 ```r
-ggplot(pers.int.weekday, aes(x=interval, y=steps)) +
-       geom_line(aes(color="Weekdays")) +
-       geom_line(data=pers.int.weekend, aes(color="Weekends")) +
+ggplot(pers.int.week, aes(x=interval, y=steps, color = dow)) +
+       geom_line() +
+       facet_wrap(~dow, ncol = 1, nrow=2) +
        labs(title = "Average Steps Taken per Interval on Weekdays vs. Weekends", 
             x = "5-minute Interval",
             y = "Average Steps Taken",

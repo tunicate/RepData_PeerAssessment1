@@ -129,15 +129,11 @@ head(pers.act.imp)
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
 ```{r,echo=TRUE}
-pers.act.imp.weekday <- subset(pers.act.imp, dow == "weekday")
-pers.int.weekday <- aggregate(steps ~ interval, data = pers.act.imp.weekday, mean, na.rm = TRUE)
-head(pers.int.weekday)
-pers.act.imp.weekend <- subset(pers.act.imp, dow == "weekend")
-pers.int.weekend <- aggregate(steps ~ interval, data = pers.act.imp.weekend, mean, na.rm = TRUE)
-head(pers.int.weekend)
-ggplot(pers.int.weekday, aes(x=interval, y=steps)) +
-       geom_line(aes(color="Weekdays")) +
-       geom_line(data=pers.int.weekend, aes(color="Weekends")) +
+pers.int.week <- aggregate(steps ~ interval + dow, data = pers.act.imp, mean, na.rm = TRUE)
+head(pers.int.week)
+ggplot(pers.int.week, aes(x=interval, y=steps, color = dow)) +
+       geom_line() +
+       facet_wrap(~dow, ncol = 1, nrow=2) +
        labs(title = "Average Steps Taken per Interval on Weekdays vs. Weekends", 
             x = "5-minute Interval",
             y = "Average Steps Taken",
